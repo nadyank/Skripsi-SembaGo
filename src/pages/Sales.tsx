@@ -21,9 +21,11 @@ export default function Sales() {
   const [showScanner, setShowScanner] = useState(true);
   const [finished, setFinished] = useState(false);
 
-  // =========================
+  
+// INPUT MANUAL
+const [manualInput, setManualInput] = useState('');
+
 // FETCH PRODUCTS
-// =========================
 useEffect(() => {
 
   const fetchProducts = async () => {
@@ -36,7 +38,12 @@ useEffect(() => {
 
       const data = await res.json();
 
-      setProducts(data);
+setProducts(
+  data.map((item:any) => ({
+    ...item,
+    id_barang: item.id_barang || item.idBarang || ""
+  }))
+);
 
     } catch (error) {
 
@@ -93,6 +100,40 @@ useEffect(() => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [products]);
+  
+const handleManualAdd = async () => {
+
+  const keyword = manualInput.trim();
+
+  if (!keyword) {
+    alert("Masukkan ID Barang atau Nama Barang");
+    return;
+  }
+
+  try {
+
+    const res = await fetch(
+      `${API}/products/search/${keyword}`
+    );
+
+    const product = await res.json();
+
+    if (!product) {
+      alert(`Produk "${manualInput}" tidak ditemukan`);
+      return;
+    }
+
+    addToCart(product);
+
+    setManualInput('');
+
+  } catch {
+
+    alert("Gagal mengambil data produk");
+
+  }
+
+};
 
   // =========================
   // SCAN HANDLER
@@ -286,6 +327,33 @@ useEffect(() => {
             <Camera size={20} />
             {showScanner ? 'Tutup Scanner' : 'Buka Scanner'}
           </button>
+
+{/* INPUT MANUAL */}
+<div className="mb-4 flex gap-2">
+
+  <input
+    type="text"
+    value={manualInput}
+    onChange={(e) =>
+      setManualInput(e.target.value)
+    }
+    placeholder="ID Barang / Nama Barang"
+    className="flex-1 border p-3 rounded-xl outline-none"
+    onKeyDown={(e) => {
+      if (e.key === 'Enter') {
+        handleManualAdd();
+      }
+    }}
+  />
+
+  <button
+    onClick={handleManualAdd}
+    className="bg-maroon text-white px-4 rounded-xl"
+  >
+    Tambah
+  </button>
+
+</div>
 
           <AnimatePresence>
             {showScanner && (
