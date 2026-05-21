@@ -1,0 +1,8 @@
+{
+  "name": "SembaGo",
+  "description": "Sistem Pengelolaan Stok dan Prediksi Penjualan Berbasis Web untuk Toko Sembako SRC Saiful dengan fitur scan barcode dan prediksi regresi linear.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}

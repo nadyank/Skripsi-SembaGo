@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Detail product inventory for SRC Saiful",
+      "type": "object",
+      "properties": {
+        "id_barang": { "type": "string" },
+        "barcode": { "type": "string" },
+        "name": { "type": "string" },
+        "unit": { "type": "string" },
+        "stock": { "type": "number" },
+        "qty_per_renceng": { "type": "number" },
+        "qty_per_dus": { "type": "number" },
+        "qty_per_pack": { "type": "number" },
+        "price_pcs": { "type": "number" },
+        "price_renceng": { "type": "number" },
+        "price_dus": { "type": "number" },
+        "price_pack": { "type": "number" },
+        "description": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id_barang", "barcode", "name", "price_pcs", "stock"]
+    },
+    "Sale": {
+      "title": "Sale",
+      "description": "Record of a sales transaction",
+      "type": "object",
+      "properties": {
+        "timestamp": { "type": "string", "format": "date-time" },
+        "totalAmount": { "type": "number" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "productId": { "type": "string" },
+              "name": { "type": "string" },
+              "quantity": { "type": "number" },
+              "price": { "type": "number" }
+            }
+          }
+        }
+      },
+      "required": ["timestamp", "totalAmount", "items"]
+    }
+  },
+  "firestore": {
+    "inventory": {
+      "schema": "Product",
+      "description": "Collection of products in stock"
+    },
+    "sales": {
+      "schema": "Sale",
+      "description": "Collection of sales transactions"
+    }
+  }
+}
