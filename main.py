@@ -46,6 +46,27 @@ def get_products(db: Session = Depends(get_db)):
     return db.query(models.Product).all()
 
 # =========================
+# SEARCH PRODUCT MANUAL
+# =========================
+@app.get("/products/search/{keyword}")
+def search_product(
+    keyword: str,
+    db: Session = Depends(get_db)
+):
+
+    product = (
+        db.query(models.Product)
+        .filter(
+            (models.Product.id_barang.ilike(keyword))
+            |
+            (models.Product.name.ilike(f"%{keyword}%"))
+        )
+        .first()
+    )
+
+    return product
+
+# =========================
 # UPDATE PRODUCT
 # =========================
 @app.put("/products/{id}")
